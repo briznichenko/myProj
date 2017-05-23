@@ -88,9 +88,16 @@
         long y = [[current_position valueForKey:@"y"] longValue];
         [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
     }
-    else if (x)
+    else if (x == ([unbuilt_maze[0] indexOfObject: [unbuilt_maze[0] lastObject]] - 1))
     {
-        current_position = [self up:current_position];
+        current_position = [self left:current_position];
+        long x = [[current_position valueForKey:@"x"] longValue];
+        long y = [[current_position valueForKey:@"y"] longValue];
+        [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
+    }
+    else
+    {
+        current_position = [self right:current_position];
         long x = [[current_position valueForKey:@"x"] longValue];
         long y = [[current_position valueForKey:@"y"] longValue];
         [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
