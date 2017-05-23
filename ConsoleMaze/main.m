@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Maze.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        // insert code here...
-        NSLog(@"Hello, World!");
+        Maze *maze = [[Maze alloc] initWithRows:6 columns:6];
+        [maze printMaze];
     }
     return 0;
 }
