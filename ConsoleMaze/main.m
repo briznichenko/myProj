@@ -11,7 +11,7 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        Maze *maze = [[Maze alloc] initWithRows:6 columns:6];
+        Maze *maze = [[Maze alloc] initWithRows:21 columns:21];
         [maze printMaze];
     }
     return 0;

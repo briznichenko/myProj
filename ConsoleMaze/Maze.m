@@ -18,16 +18,26 @@
     if(self)
         {
             self.a_maze = [NSMutableArray array];
-            for (int column = 0; column < columns; column++)
+            for (int row = 0; row < rows; row++)
             {
                 NSMutableArray *columnArray = [NSMutableArray array];
             
-                for (int row = 0; row < rows; row++)
-                    [columnArray addObject:[NSNumber numberWithInt:1]];
+                for (int column = 0; column < columns; column++){
+                    if(row == 0 || row == (rows - 1) || column == 0 || column == (columns - 1))
+                        [columnArray addObject:@"*"];//wall
+                    else if (!(row % 2) || !(column % 2))
+                        [columnArray addObject:@"*"];//cell
+                    else
+                        [columnArray addObject:@"0"];
+                }
+                
             
                 [self.a_maze addObject:columnArray];
             }
-            self.a_maze = [self buildMaze:self.a_maze];
+            NSDictionary* startPoint = [self generateStartPoint];
+            int x = [[startPoint valueForKey:@"x"] intValue];
+            int y = [[startPoint valueForKey:@"y"] intValue];;
+            [self generateMaze:x y: y];
         }
     
 
@@ -35,120 +45,88 @@
 
     }
 
-- (NSMutableArray*)buildMaze:(NSMutableArray*) unbuilt_maze
+
+
+-(void)generateMaze:(int) x y:(int) y
 {
-    int horizontal_bound[] = {0, unbuilt_maze.count - 1};
-    NSMutableArray* vertical_bound = [NSMutableArray array];
-    
-    for (int i = 1; i < unbuilt_maze.count - 1; i++)
-        [vertical_bound addObject:[NSNumber numberWithInt:i]];
+    self.a_maze[x][y] = @" ";
+    NSArray* randomDirs = [self generateRandomDirections];
+    for (int i = 0; i < randomDirs.count; i++)
+    {
+        switch ([randomDirs[i] intValue])
+        {
+            case 0:
+                if (x - 2 <= 0)
+                    continue;
+                if (![[self.a_maze[x - 2][y] description] isEqual: @" "]){
+                    self.a_maze[x - 2][y] = @" ";
+                    self.a_maze[x - 1][y] = @" ";
+                    [self generateMaze:x - 2 y: y];
+                }
+                break;
+                
+            case 1:
+                if (y + 2 >= ((int)self.a_maze.count - 1))
+                    continue;
+                if (![[self.a_maze[x][y + 2] description] isEqual: @" "])
+                {
+                    self.a_maze[x][y + 2] = @" ";
+                    self.a_maze[x][y + 1] = @" ";
+                    [self generateMaze:x y: y + 2];
+                }
+                break;
+                
+            case 2:
+                if (x + 2 >= ((int)[self.a_maze[0] count] - 1))
+                    continue;
+                if (![[self.a_maze[x + 2][y] description] isEqual: @" "])
+                {
+                    self.a_maze[x + 2][y] = @" ";
+                    self.a_maze[x + 1][y] = @" ";
+                    [self generateMaze:x + 2 y: y];
+                }
+                break;
+                
+            case 3:
+                if (y - 2 <= 0)
+                    continue;
+                if (![[self.a_maze[x][y - 2] description] isEqual: @" "])
+                {
+                    self.a_maze[x][y - 2] = @" ";
+                    self.a_maze[x][y - 1] = @" ";
+                    [self generateMaze:x y: y - 2];
+                }
+                break;
 
-    int row = arc4random_uniform(unbuilt_maze.count - 1);
-    int column = 0;
-    
-    //start point
-    if(row == 0)
-    {
-        column = arc4random_uniform([vertical_bound count]  - 1);
-        [unbuilt_maze[row] replaceObjectAtIndex:column withObject:[NSNumber numberWithInt:8]];
+        }
     }
-    else if (row == unbuilt_maze.count - 1)
-    {
-        column = arc4random_uniform(vertical_bound.count - 1);
-         [unbuilt_maze[row] replaceObjectAtIndex:column withObject:[NSNumber numberWithInt:8]];
-    }
-    else
-    {
-        column = horizontal_bound[arc4random_uniform(2)];
-        [unbuilt_maze[row] replaceObjectAtIndex:column withObject:[NSNumber numberWithInt:8]];
-    }
-    
-    //building a path
-    NSMutableDictionary* path = [NSMutableDictionary dictionary];
-    NSDictionary* current_position = @{@"y":@(row), @"x":@(column)};
-    [path setObject:current_position forKey:@"Entry"];
-    NSLog(@"%@", current_position);
-    
-    
-    //making first move
-    long x = [[current_position valueForKey:@"x"] longValue];
-    long y = [[current_position valueForKey:@"y"] longValue];
-    
-    if(y == 0)
-    {
-        current_position = [self down:current_position];
-        long x = [[current_position valueForKey:@"x"] longValue];
-        long y = [[current_position valueForKey:@"y"] longValue];
-        [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
-    }
-    else if (y == (unbuilt_maze.count - 1))
-    {
-        current_position = [self up:current_position];
-        long x = [[current_position valueForKey:@"x"] longValue];
-        long y = [[current_position valueForKey:@"y"] longValue];
-        [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
-    }
-    else if (x == ([unbuilt_maze[0] indexOfObject: [unbuilt_maze[0] lastObject]] - 1))
-    {
-        current_position = [self left:current_position];
-        long x = [[current_position valueForKey:@"x"] longValue];
-        long y = [[current_position valueForKey:@"y"] longValue];
-        [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
-    }
-    else
-    {
-        current_position = [self right:current_position];
-        long x = [[current_position valueForKey:@"x"] longValue];
-        long y = [[current_position valueForKey:@"y"] longValue];
-        [unbuilt_maze[y] replaceObjectAtIndex:x withObject:@"0"];
-    }
-
-    
-
-    
-    while (([current_position valueForKey:@"x"] > [NSNumber numberWithInt: 0] && [current_position valueForKey:@"x"] < [NSNumber numberWithInt: vertical_bound.count - 1]) &&
-           ([current_position valueForKey:@"y"] > [vertical_bound firstObject] && [current_position valueForKey:@"y"] < [vertical_bound lastObject]))
-    {
-        
-    }
-    
-    
-    NSMutableArray* built_maze = unbuilt_maze;
-    return built_maze;
+    NSLog(@"%i, %i", x, y);
 }
 
-//movement
-
--(NSDictionary*) up:(NSDictionary*) position
+-(NSDictionary*)generateStartPoint
 {
-    long x = [[position valueForKey:@"x"] longValue];
-    long y = [[position valueForKey:@"y"] longValue] - 1;
-    NSDictionary* new_position = @{@"x":@(x), @"y":@(y)};
-    return new_position;
+    long x = arc4random_uniform((int)self.a_maze.count / 2) * 2 + 1;
+    long y = arc4random_uniform((int)[self.a_maze[0] count] / 2) * 2 + 1;
+    return @{@"x":@(x), @"y":@(y)};
+
 }
 
--(NSDictionary*) down:(NSDictionary*) position
+-(NSArray*) generateRandomDirections
 {
-    long x = [[position valueForKey:@"x"] longValue];
-    long y = [[position valueForKey:@"y"] longValue] + 1;
-    NSDictionary* new_position = @{@"x":@(x), @"y":@(y)};
-    return new_position;
+    NSMutableArray* randomNums = [NSMutableArray array];
+    while(randomNums.count < 4){
+        NSNumber* randomNum = [NSNumber numberWithInt:arc4random_uniform(4)];
+        if([randomNums containsObject:randomNum])
+            randomNum = [NSNumber numberWithInt:arc4random_uniform(4)];
+        else
+            [randomNums addObject:randomNum];
+    }
+    return randomNums;
 }
 
--(NSDictionary*) left:(NSDictionary*) position
+-(void) generateEntryAndExitPoints
 {
-    long x = [[position valueForKey:@"x"] longValue] - 1;
-    long y = [[position valueForKey:@"y"] longValue];
-    NSDictionary* new_position = @{@"x":@(x), @"y":@(y)};
-    return new_position;
-}
-
--(NSDictionary*) right:(NSDictionary*) position
-{
-    long x = [[position valueForKey:@"x"] longValue] + 1;
-    long y = [[position valueForKey:@"y"] longValue];
-    NSDictionary* new_position = @{@"x":@(x), @"y":@(y)};
-    return new_position;
+    //Todo
 }
 
 

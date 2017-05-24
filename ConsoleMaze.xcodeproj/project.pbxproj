@@ -254,6 +254,7 @@
 				CE0734561ED4414C00B3B843 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
