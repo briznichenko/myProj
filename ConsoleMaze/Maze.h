@@ -10,8 +10,7 @@
 
 @interface Maze : NSObject
 
-@property(strong) NSMutableArray* a_maze;
-
+@property(weak) NSMutableArray* a_maze;
 
 - (instancetype)initWithRows:(NSInteger)rows columns:(NSInteger)columns;
 - (void) printMaze;
