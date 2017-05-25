@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CE0734511ED4414C00B3B843 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0734501ED4414C00B3B843 /* main.m */; };
 		CE0734591ED441A400B3B843 /* Maze.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0734581ED441A400B3B843 /* Maze.m */; };
+		CE4C98411ED72F0C00A088B2 /* MazeSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4C98401ED72F0C00A088B2 /* MazeSolver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		CE0734501ED4414C00B3B843 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE0734571ED441A400B3B843 /* Maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maze.h; sourceTree = "<group>"; };
 		CE0734581ED441A400B3B843 /* Maze.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Maze.m; sourceTree = "<group>"; };
+		CE4C983F1ED72F0C00A088B2 /* MazeSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MazeSolver.h; sourceTree = "<group>"; };
+		CE4C98401ED72F0C00A088B2 /* MazeSolver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MazeSolver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,8 @@
 				CE0734501ED4414C00B3B843 /* main.m */,
 				CE0734571ED441A400B3B843 /* Maze.h */,
 				CE0734581ED441A400B3B843 /* Maze.m */,
+				CE4C983F1ED72F0C00A088B2 /* MazeSolver.h */,
+				CE4C98401ED72F0C00A088B2 /* MazeSolver.m */,
 			);
 			path = ConsoleMaze;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE0734591ED441A400B3B843 /* Maze.m in Sources */,
+				CE4C98411ED72F0C00A088B2 /* MazeSolver.m in Sources */,
 				CE0734511ED4414C00B3B843 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

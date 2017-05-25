@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "Maze.h"
+#import "MazeSolver.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-        Maze *maze = [[Maze alloc] initWithRows:11 columns:11];
+        Maze *maze = [[Maze alloc] initWithRows:25 columns:25];
         [maze printMaze];
+        MazeSolver* solver = [[MazeSolver alloc] init];
+        [solver solveAMaze:maze.a_maze];
     }
     return 0;
 }
